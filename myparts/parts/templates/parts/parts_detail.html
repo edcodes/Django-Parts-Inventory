@@ -1,0 +1,148 @@
+{% extends "design/base.html" %}
+{% load static %}
+
+{% block content %}
+
+	<h1>Parts</h1>	
+		<div class="container-fluid detailview">		
+			<div class="row m-1 ">
+			<div class="col-6 p-1">				
+			<a  href="{% url 'parts-list-page' %}" title="Back" alt="Back">
+			<img class="float-left p-1" src="{% static 'icons/back.png' %}" width="32" title="Back" alt="Back">
+			</a>
+			</div>
+			<div class="col-6 p-1 text-end">
+				<a  href="{% url 'parts-new-page' %}" title="Add New Part" alt="Add New Part"><img class="float-right p-1" src="{% static 'icons/add.png' %}" width="32" title="Add New Part" alt="Add New Part"></a>
+				<a  href="{% url 'parts-update-page' object.pk %}" title="Edit Part" alt="Edit Part"><img class="float-right p-1" src="{% static 'icons/edit.png' %}" width="32" title="Edit Part" alt="Edit Part"></a>
+			</div>
+			</div>
+
+			<div class="row m-1">
+				<div class="col-5 border rounded p-1"><strong>Part Name:</strong><br>{{ object.part_name }}</div>
+				<div class="col-5 border rounded p-1"><strong>Model:</strong><br>{%if object.part_model %}{{ object.part_model }}{% endif %}</div>
+				<div class="col-2 border rounded p-1"><strong>Quantity:</strong><br>{%if object.part_qty_in_stock %}{{ object.part_qty_in_stock }}{% endif %}</div>	
+			</div>
+			<div class="row m-1">
+				<div class="col-4 border rounded p-1"><strong>API:</strong><br>{%if object.part_barcode %}{{ object.part_barcode }}{% endif %}</div>				
+				<div class="col-3 border rounded p-1"><strong>SN:</strong><br>{%if object.part_manufacturer_barcode %}{{ object.part_manufacturer_barcode }}{% endif %}</div>
+				<div class="col-3 border rounded p-1"><strong>PN:</strong><br>{%if object.part_manufacturer_part_number %}{{ object.part_manufacturer_part_number }}{% endif %}</div>
+				<div class="col-2 border rounded p-1"><strong>Minimum Quantity:</strong><br>{%if object.part_min_qty %}{{ object.part_min_qty }}{% endif %}</div>	
+				
+				
+				
+			</div>
+			<div class="row m-1">
+				<div class="col-12 border rounded p-1"><strong>Description:</strong><br>{%if object.part_note %}{{ object.part_note|safe }}{% endif %}</div>				
+			</div>
+			<div class="row m-1">				
+				<div class="col-12 border rounded p-1"><strong>Where to Use:</strong><br>{%if object.part_compatible %}{{ object.part_compatible }}{% endif %}<br>
+				{% for mresult in object.machinparts.all %}{{ mresult.machine_id }} <strong>|</strong>{% endfor %}<br>
+				{% for mresult in object.moldparts.all %}{{ mresult.mold_id }} <strong>|</strong>{% endfor %}<br>
+				
+				</div>
+			</div>
+        </div>
+		<div class="container-fluid detailview">
+			<div class="row m-1">
+				<div class="col-12 border rounded p-1">
+					<div class="row">
+						<div class="col-10"><h3>Pictures / Files</h3></div>
+						<div class="col-2">
+							<a  href="{% url 'parts-file-add-page' partid=object.pk %}" title="Add Picture / File" alt="Add Picture / File"> 
+							<img class="float-right p-1" src="{% static 'icons/add.png' %}" width="32" title="Add Picture / File" alt="Add Picture / File">
+							</a>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class="row m-1">
+				{% for picresult in parts_files %}
+					<div class="col-2 border rounded p-1">
+						<a href="/media/{{ picresult.partfile }}" target="_blank">
+							<img src="/media/{{ picresult.partfile }}" width="170">
+						</a>
+						<a  href="{% url 'parts-file-delete-page' picresult.pk %}" title="Delete Picture / File" alt="Delete Picture / File"> 
+							<img class="float-right p-1" src="{% static 'icons/delete.png' %}" width="32" title="Delete Picture / File" alt="Delete Picture / File">
+						</a>
+					</div>
+				{% endfor %}					
+			</div>	
+		</div>
+			
+		<div class="container-fluid detailview">		
+		<div class="row m-1"><div class="col-12 border rounded p-1"><h3>Current Inventory Location</h3></div></div>
+				<div class="row m-1">
+					<div class="col-2 border rounded p-1"><strong>Warehouse</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Rack</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Bay</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Level</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Position</strong></div>					
+					<div class="col-1 border rounded p-1"><strong>Qtty</strong></div>
+					<div class="col-1 p-1"></div>
+				</div>	
+		
+			{% for mresult2 in parts_location %}
+				<div class="row m-1">
+					<div class="col-2 border rounded p-1">{{ mresult2.warehouse }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.rack }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.bay }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.level }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.position }}</div>					
+					<div class="col-1 border rounded p-1">{{ mresult2.quantity }}</div>
+					<div class="col-1 border rounded p-1"><a  href="{% url 'parts-move-location-page' mresult2.pk %}" title="Move" alt="Move">Move</a></div>
+				</div>
+			{% endfor %}
+		
+		</div>
+		<div class="container-fluid detailview">	
+			<div class="row m-1">
+				<div class="col-6 border rounded p-1">
+					<div class="row m-1 border-bottom">
+						<div class="col-10 p-1"><strong>Received / Orders / Incoming</strong></div>
+						<div class="col-2 p-1">
+						 <a  href="{% url 'parts-purchase-page' partid=object.pk %}" title="Add Invoice" alt="Add Invoice"> 
+						<img class="float-right p-1" src="{% static 'icons/add.png' %}" width="32" title="Add Invoice" alt="Add Invoice"></a></div>
+					</div>
+					<div class="row m-1 ">
+						<div class="col-6 p-1 text-center border-right"><strong>Date</strong></div>
+						<div class="col-6 p-1 text-center"><strong>Quantity</strong></div>
+					</div>
+					{% for mresult in object.partspurchase.all %}
+					<div class="row m-1 border-bottom">
+						<div class="col-6 p-1 text-center border-right"><a  href="{% url 'parts-purchase-detail-page' mresult.pk %}" title="Detail" alt="Detail">{{ mresult.purchase_date|date:'m-d-Y h:i A' }}</a></div>
+						<div class="col-6 p-1 text-center "><a  href="{% url 'parts-purchase-detail-page' mresult.pk %}" title="Detail" alt="Detail">{{ mresult.qty_ordered }}</a></div>
+					</div>
+					{% empty %}
+					<div class="row m-1 ">
+						<div class="col-6 p-1 text-center border-right">-----</div>
+						<div class="col-6 p-1 text-center ">-----</div>
+					</div>	  
+					{% endfor %}
+	
+				</div>
+				<div class="col-6 border rounded p-1">
+					<div class="row m-1 border-bottom">
+						<div class="col-10 p-1"><strong>Release / Use the Part / Outgoing</strong></div>
+						<div class="col-2 p-1"><a  href="{% url 'parts-release-page' partid=object.pk %}" title="Add Release" alt="Add Release"> 
+						<img class="float-right p-1" src="{% static 'icons/add.png' %}" width="32" title="Add Release" alt="Add Release"></a></div>
+					</div>
+					<div class="row m-1 ">
+						<div class="col-6 p-1 text-center border-right"><strong>Date</strong></div>
+						<div class="col-6 p-1 text-center"><strong>Quantity</strong></div>
+					</div>
+					{% for mresult in object.partsrelease.all %}
+					<div class="row m-1 border-bottom">
+						<div class="col-6 p-1 text-center border-right"><a  href="{% url 'parts-release-detail-page' mresult.pk %}" title="Detail" alt="Detail">{{ mresult.release_date|date:'m-d-Y h:i A' }}</a></div>
+						<div class="col-6 p-1 text-center "><a  href="{% url 'parts-release-detail-page' mresult.pk %}" title="Detail" alt="Detail">{{ mresult.qty_released }}</a></div>
+					</div>
+					{% empty %}
+					<div class="row m-1 ">
+						<div class="col-6 p-1 text-center border-right">-----</div>
+						<div class="col-6 p-1 text-center ">-----</div>
+					</div>	  
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+
+{% endblock content %}

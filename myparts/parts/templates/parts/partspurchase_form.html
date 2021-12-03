@@ -1,0 +1,40 @@
+{% extends "design/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+	<h1>Part Received (Incoming)</h1>    
+		<div class="media-body" >
+			<form method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					<div class="row m-1">
+						<div class="col-3 border rounded p-1 "><strong>Date:</strong><br>{{ form.purchase_date }}</div>
+						<div class="col-3 border rounded p-1 "><strong>PO Number:</strong><br>{{ form.po_number }}</div>
+						<div class="col-3 border rounded p-1 "><strong>Invoice Number:</strong><br>{{ form.invoice_number }}</div>
+						<div class="col-3 border rounded p-1 "><strong>Quantitty:</strong><br>{{ form.qty_ordered }}</div>										
+					</div>			
+					<div class="row m-1">
+						<div class="col-6 border rounded p-1 "><strong>Vendor Name:</strong><br>{{ form.vendor }}</div>	
+						<div class="col-6 border rounded p-1 "><strong>Vendor Phone Number:</strong><br>{{ form.vendor_phone }}{%if form.vendor_phone.errors %}
+						<br><small class="text-danger">{{ form.vendor_phone.errors.0|escape }}</small>
+						{%endif%}</div>				
+					</div>	
+					<div class="row m-1">
+						<div class="col-12 border rounded p-1 "><strong>Note:</strong><br>{{ form.purchase_note }}</div>	
+					</div>
+					
+				</fieldset>
+				
+				
+				
+				
+				
+				<div class="row m-1">
+					<div class="col-12  p-1 text-center"><button type="submit" class="btn btn-primary">Next</button></div>
+				</div>	
+			</form>
+		</div>   
+
+
+{% endblock content %}

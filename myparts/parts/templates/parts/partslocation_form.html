@@ -1,0 +1,78 @@
+{% extends "design/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+	<h1>Part Received (Incoming)</h1>    
+		<div class="media-body" >
+			<form method="POST">
+				{% csrf_token %}
+				<div class="row m-1 ">
+				<div class="col-6 p-1">				
+				<a  href="{% url 'parts-detail-page' purchase.part_id.id %}" title="Back" alt="Back">
+				<img class="float-left p-1" src="{% static 'icons/back.png' %}" width="32" title="Back" alt="Back">
+				</a>
+				</div>
+				<div class="col-6 p-1">
+					
+				</div>
+				</div>
+					<div class="row m-1">
+						<div class="col-3 border rounded p-1 "><strong>Date:</strong><br>{{ purchase.purchase_date }}</div>
+						<div class="col-3 border rounded p-1 "><strong>PO Number:</strong><br>{{ purchase.po_number }}</div>
+						<div class="col-3 border rounded p-1 "><strong>Invoice Number:</strong><br>{{ purchase.invoice_number }}</div>
+						<div class="col-3 border rounded p-1 "><strong>Quantitty Ordered:</strong><br>{% if purchase.qty_ordered %}{{ purchase.qty_ordered }}{% endif %}</div>										
+					</div>			
+					<div class="row m-1">
+						<div class="col-6 border rounded p-1 "><strong>Vendor Name:</strong><br>{{ purchase.vendor }}</div>	
+						<div class="col-6 border rounded p-1 "><strong>Vendor Phone Number:</strong><br>{{ purchase.vendor_phone }}</div>				
+					</div>	
+					<div class="row m-1">
+						<div class="col-12 border rounded p-1 "><strong>Note:</strong><br>{{ purchase.purchase_note|safe }}</div>	
+					</div>					
+				
+				
+                <div class="row m-1"><div class="col-12 border rounded p-1"><h3>Existing Inventory Location</h3></div></div>
+				<div class="row m-1">
+					<div class="col-2 border rounded p-1"><strong>Warehouse</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Rack</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Bay</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Level</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Position</strong></div>					
+					<div class="col-2 border rounded p-1"><strong>Qtty</strong></div>
+				</div>	
+				{% for currentlocation in parts_location %}
+					<div class="row m-1">
+						<div class="col-2 border rounded p-1">{{ currentlocation.warehouse }}</div>
+						<div class="col-1 border rounded p-1">{{ currentlocation.rack }}</div>
+						<div class="col-1 border rounded p-1">{{ currentlocation.bay }}</div>
+						<div class="col-1 border rounded p-1">{{ currentlocation.level }}</div>
+						<div class="col-1 border rounded p-1">{{ currentlocation.position }}</div>						
+						<div class="col-2 border rounded p-1">{{ currentlocation.quantity }}</div>
+					</div>
+				{% endfor %}
+				<br><br>
+				{%if form.errors %}
+				<div class="row m-1">
+					<div class="col-12 p-1"><small class="text-danger">{{ form.errors|escape }}</small></div>
+				</div>		
+				{%endif%}
+				<div class="row m-1"><div class="col-12 border rounded p-1"><h3>Incoming Inventory Location</h3></div></div>
+				<div class="row m-1">
+						<div class="col-2 border rounded p-1">{{ form.warehouse }}</div>
+						<div class="col-1 border rounded p-1">{{ form.rack }}</div>
+						<div class="col-1 border rounded p-1">{{ form.bay }}</div>
+						<div class="col-1 border rounded p-1">{{ form.level }}</div>
+						<div class="col-1 border rounded p-1">{{ form.position }}</div>						
+						<div class="col-2 border rounded p-1">{{ form.quantity }}</div>
+				</div>
+				
+				
+				<div class="row m-1">
+					<div class="col-12  p-1 text-center"><button type="submit" class="btn btn-primary">Save</button></div>
+				</div>	
+			</form>
+		</div>   
+
+
+{% endblock content %}

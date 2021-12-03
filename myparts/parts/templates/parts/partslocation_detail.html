@@ -1,0 +1,113 @@
+{% extends "design/base.html" %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+
+	<h1>Move Location</h1>	
+		<div class="container-fluid detailview">		
+			<div class="row m-1 ">
+				<div class="col-6 p-1">				
+				<a  href="{% url 'parts-detail-page' object.part_id.id %}" title="Back" alt="Back">
+				<img class="float-left p-1" src="{% static 'icons/back.png' %}" width="32" title="Back" alt="Back">
+				</a>
+				</div>
+				<div class="col-6 p-1">
+					<a  href="{% url 'parts-new-page' %}" title="Add New Part" alt="Add New Part">
+					<img class="float-right p-1" src="{% static 'icons/add.png' %}" width="32" title="Add New Part" alt="Add New Part">
+					</a>
+					
+					<a  href="{% url 'parts-update-page' object.pk %}" title="Edit Part" alt="Edit Part">
+					<img class="float-right p-1" src="{% static 'icons/edit.png' %}" width="32" title="Edit Part" alt="Edit Part">
+					</a>
+
+
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid detailview">	
+			<div class="row m-1"><div class="col-12 border rounded p-1 text-center"><h2>{{ object.part_id }}</h2></div></div>
+			<div class="row m-1"><div class="col-12 border rounded p-1"><h4>Current Inventory Location</h4></div></div>
+			<div class="row m-1">
+				<div class="col-2 border rounded p-1"><strong>Warehouse</strong></div>
+				<div class="col-1 border rounded p-1"><strong>Rack</strong></div>
+				<div class="col-1 border rounded p-1"><strong>Bay</strong></div>
+				<div class="col-1 border rounded p-1"><strong>Level</strong></div>
+				<div class="col-1 border rounded p-1"><strong>Position</strong></div>					
+				<div class="col-1 border rounded p-1"><strong>Qtty</strong></div>				
+			</div>	
+			<div class="row m-1">
+				<div class="col-2 border rounded p-1">{{ object.warehouse }}</div>
+				<div class="col-1 border rounded p-1">{{ object.rack }}</div>
+				<div class="col-1 border rounded p-1">{{ object.bay }}</div>
+				<div class="col-1 border rounded p-1">{{ object.level }}</div>
+				<div class="col-1 border rounded p-1">{{ object.position }}</div>					
+				<div class="col-1 border rounded p-1">{{ object.quantity }}</div>				
+			</div>
+		</div>
+        
+		<div class="container-fluid detailview">
+		
+			<div class="row m-1"><div class="col-12 border rounded p-1"><h4>Other Locations of same part</h4></div></div>
+				<div class="row m-1">
+					<div class="col-2 border rounded p-1"><strong>Warehouse</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Rack</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Bay</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Level</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Position</strong></div>					
+					<div class="col-1 border rounded p-1"><strong>Qtty</strong></div>
+				</div>	
+		
+			{% for mresult2 in parts_location %}
+				<div class="row m-1">
+					<div class="col-2 border rounded p-1">{{ mresult2.warehouse }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.rack }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.bay }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.level }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.position }}</div>					
+					<div class="col-1 border rounded p-1">{{ mresult2.quantity }}</div>
+				</div>
+			{% endfor %}
+		
+		</div>
+		
+		<div class="container-fluid detailview">
+	
+					<div class="row m-1"><div class="col-12 border rounded p-1"><h4>New Location</h4></div></div>
+					<div class="row m-1">
+						<div class="col-2 border rounded p-1"><strong>Warehouse</strong></div>
+						<div class="col-1 border rounded p-1"><strong>Rack</strong></div>
+						<div class="col-1 border rounded p-1"><strong>Bay</strong></div>
+						<div class="col-1 border rounded p-1"><strong>Level</strong></div>
+						<div class="col-1 border rounded p-1"><strong>Position</strong></div>					
+						<div class="col-1 border rounded p-1"><strong>Qtty</strong></div>
+					</div>	
+			
+					<input type="hidden" class="form-control" id="id_partid_id" value="{{ object.part_id.id }}">
+					<input type="hidden" class="form-control" id="id_existingid_id" value="{{ object.id }}">
+					<input type="hidden" class="form-control" id="id_redirect_id" value="{% url 'parts-detail-page' object.part_id.id %}">
+					
+					
+					<div class="row m-1">
+						<div class="col-2 border rounded p-1"><select name="warehouse_id" class="select form-control" required="" id="id_warehouse_id"></select></div>
+						<div class="col-1 border rounded p-1"><select name="rack_id" class="select form-control" required="" id="id_rack_id"></select></div>
+						<div class="col-1 border rounded p-1"><select name="bay_id" class="select form-control" required="" id="id_bay_id"></select></div>
+						<div class="col-1 border rounded p-1"><select name="level_id" class="select form-control" required="" id="id_level_id"></select></div>
+						<div class="col-1 border rounded p-1"><select name="position_id" class="select form-control" required="" id="id_position_id"></select></div>					
+						<div class="col-1 border rounded p-1"><input type="text" class="form-control" id="id_quantity_id" placeholder="Qty"></div>
+					</div>
+					<div class="row m-1">
+						<div class="col-12 text-center p-1">
+							<button class="btn btn-primary" id="move_location">Move</button>
+						</div>
+					</div>
+					<div class="row m-1">
+						<div class="col-12 text-center p-1" id="result">
+						</div>
+					</div>
+		</div>
+		
+<script type="text/javascript" src="{% static 'js/movepartlocation.js' %}" ></script>
+
+	
+{% endblock content %}

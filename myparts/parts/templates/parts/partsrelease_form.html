@@ -1,0 +1,115 @@
+{% extends "design/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+	{% for field in form %}    
+        {% if field.errors %}
+		<audio autoplay>
+		  <source src="/static/sound/error.ogg" type="audio/ogg">
+		  <source src="/static/sound/error.mp3" type="audio/mpeg">		  
+		</audio>
+		{% endif %}
+	{% endfor %}
+
+	<h1>Part Release (Outgoing)</h1>    
+		<div class="media-body">
+			<form method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					<div class="row m-1">
+						<div class="col-4 border rounded p-1 "><strong>Date:</strong><br>{{ form.release_date }}</div>
+						<div class="col-4 border rounded p-1 "><strong>Total Quantity Out:</strong><br>{{ form.qty_released }}<input type='hidden' class="totalqtyout" id="totalqtyout" value="">
+						{%if form.qty_released.errors %}
+						<br><small class="text-danger">{{ form.qty_released.errors.0|escape }}</small>
+						{%endif%}
+						</div>
+						<div class="col-4 border rounded p-1 "><strong>Employee:</strong><br>{{ form.employee }}</div>
+					</div>
+					
+			<div class="row m-1"><div class="col-12 border rounded p-1"><h3>Current Inventory Location</h3></div></div>
+				<div class="row m-1">
+					<div class="col-2 border rounded p-1"><strong>Warehouse</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Rack</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Bay</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Level</strong></div>
+					<div class="col-1 border rounded p-1"><strong>Position</strong></div>					
+					<div class="col-1 border rounded p-1"><strong>Qty In Stock </strong></div>
+					<div class="col-1 border rounded p-1"><strong>Qty Out</strong></div>
+				</div>	
+			{% for mresult2 in parts_location %}
+				<div class="row m-1">
+					<div class="col-2 border rounded p-1"><input type='hidden' class="locationid" name="locationid_{{ forloop.counter }}" id="locationid_{{ forloop.counter }}" value="{{ mresult2.pk }}"  >{{ mresult2.warehouse }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.rack }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.bay }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.level }}</div>
+					<div class="col-1 border rounded p-1">{{ mresult2.position }}</div>					
+					<div class="col-1 border rounded p-1"><input type='hidden' class="currentqtty" id="currentqtty_{{ forloop.counter }}" value="{{ mresult2.total_location_inventory }}"  >{{ mresult2.quantity }}</div>
+					<div class="col-1 border rounded p-1"><input type='text' class="qtyout" id="qtyout_{{ forloop.counter }}" name="qtyout_{{ forloop.counter }}" style="width:60px;"></div>
+				</div>
+			{% endfor %}
+		
+					
+					<div class="row m-1">
+						<div class="col-12 border rounded p-1 "><strong>Note:</strong><br>{{ form.release_note }}</div>	
+					</div>
+				</fieldset>
+				<div class="row m-1">
+					<div class="col-12  p-1 text-center"><button type="submit" class="btn btn-primary">Save</button></div>
+				</div>	
+			</form>
+		</div>
+		
+		
+		
+<script type="text/javascript">		
+
+	$(function() {
+			//$("qtyout").change(changeqty(this.id));
+			$(document).on('keyup', '[id^=qtyout]', function(e) {
+			changeqty(this.id)
+			});	
+	});		
+		
+		
+function changeqty(myid) {
+	var suffix = myid.match(/\d+/);
+	currentqtty=parseInt($("#currentqtty_"+suffix[0]).val());
+	qtyout=parseInt($("#"+myid).val());
+	if(isNaN(qtyout)) {var qtyout = 0;} 
+	if(qtyout == "---------" || qtyout == "" || qtyout == null ){qtyout=0;}
+	if(currentqtty == "---------" || currentqtty == "" || currentqtty == null ){currentqtty=0;}
+	
+	$("#"+myid).val(qtyout);
+	
+	if (qtyout > currentqtty)
+	{
+	$("#"+myid).val(currentqtty);
+	}
+	totalout();
+	//console.log(currentqtty);
+}
+		
+function totalout() {		
+
+	var sum = 0;
+    $('.qtyout').each(function() {
+        sum += Number($(this).val());
+    });
+	
+	if(isNaN(sum)) {var sum = 0;} 
+	if(sum == "---------" || sum == "NaN" || sum == "" || sum == null ){sum=0;}
+
+	$("#id_qty_released").val(sum);
+	$("#totalqtyout").val(sum);
+
+
+}
+		
+		
+		
+</script>		
+
+
+{% endblock content %}

@@ -1,0 +1,18 @@
+{% extends "design/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<h1>Add file to Part</h1>    
+		<div class="media-body">
+			<form method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					
+					{{ form|crispy }}				
+				</fieldset>
+				<div>
+					<button type="submit">Save</button>
+				</div>	
+			</form>
+		</div>        
+
+{% endblock content %}

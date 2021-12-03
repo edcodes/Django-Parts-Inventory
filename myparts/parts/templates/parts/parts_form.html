@@ -1,0 +1,109 @@
+{% extends "design/base.html" %}
+{% load static %}
+
+{% block content %}
+	<h1>Parts Inventory</h1>    
+		<div class="media-body parts">
+			<form action="" method="post">{% csrf_token %}
+            {{ form.as_p }}
+
+            
+			{{ machine.management_form }}
+
+                {% for form in machine.forms %}
+				<div class="row m-2 {% cycle row1 row2 %} formset_row">
+				
+                    {% for hidden in form.hidden_fields %}
+							{{ hidden }}
+					{% endfor %}
+
+							
+		<div class="col-3 border rounded p-2 text-left"><strong>{{ form.visible_fields.0.label|capfirst }}</strong>:</div>
+		<div class="col-4 border rounded p-2">{{ form.visible_fields.0 }}</div>
+			
+				</div>	
+                   
+                {% endfor %}
+			
+			<div class="row"><div class="col-12 border rounded"></div></div>
+			
+                {{ mold.management_form }}
+
+                {% for form in mold.forms %}
+				<div class="row m-2 {% cycle row1 row2 %} formset_row2">
+				
+                    {% for hidden in form.hidden_fields %}
+							{{ hidden }}
+					{% endfor %}
+
+							
+		<div class="col-3 border rounded p-2 text-left"><strong>{{ form.visible_fields.0.label|capfirst }}</strong>:</div>
+		<div class="col-4 border rounded p-2">{{ form.visible_fields.0 }}</div>
+			
+				</div>	
+                   
+                {% endfor %}
+
+			<div class="row"><div class="col-12 text-center"><input type="submit" value="Save" class="btn btn-primary"/> </div></div>
+            
+			</form>
+		</div>
+    
+    <script src="{% static 'formset/jquery.formset.js' %}"></script>
+    <script type="text/javascript">
+        $('.formset_row').formset({
+            addText: 'Add More Machine',
+            deleteText: 'remove',
+            prefix: 'machinparts'
+        });
+    </script>
+	<script type="text/javascript">
+	
+        $('.formset_row2').formset({
+            addText: 'Add More Mold',
+            deleteText: 'remove',
+            prefix: 'moldparts'
+        });
+    </script>
+	
+	
+<script type="text/javascript">	
+	$('body').on('keydown', 'input, select', function(e) {
+    if (e.key === "Enter") {
+        var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+        focusable = form.find('input,a,select,button,textarea').filter(':visible');
+        next = focusable.eq(focusable.index(this)+1);
+		
+        if (next.length) {
+            next.focus();
+			next.select();
+			
+        } 
+		
+        return false;
+    }
+});
+	
+</script>	
+	
+	
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

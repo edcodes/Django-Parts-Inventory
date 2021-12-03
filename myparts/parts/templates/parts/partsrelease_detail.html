@@ -1,0 +1,33 @@
+{% extends "design/base.html" %}
+{% load static %}
+{% block content %}
+
+	<h1>Parts Purchase Detail</h1>	
+		<div class="container-fluid detailview">		
+			<div class="row m-1 ">
+				<div class="col-6 p-1">				
+				<a  href="{% url 'parts-detail-page' object.part_id.id %}" title="Back" alt="Back">
+				<img class="float-left p-1" src="{% static 'icons/back.png' %}" width="32" title="Back" alt="Back">
+				</a>
+				</div>
+				<div class="col-6 p-1">
+					
+				</div>
+			</div>
+
+			<div class="row m-1">
+				<div class="col-4 border rounded p-1"><strong>Part Name:</strong><br>{{ object.part_id.part_name }}</div>							
+				<div class="col-4 border rounded p-1"><strong>SN:</strong><br>{{ object.part_id.part_manufacturer_barcode }}</div>
+				<div class="col-4 border rounded p-1"><strong>PN:</strong><br>{{ object.part_id.part_manufacturer_part_number }}</div>
+			</div>
+			<div class="row m-1">
+				<div class="col-4 border rounded p-1"><strong>Release Date:</strong><br>{{ object.release_date|date:'m-d-Y h:i A' }}</div>		
+				<div class="col-4 border rounded p-1"><strong>Employee:</strong><br>{{ object.employee }}</div>
+				<div class="col-4 border rounded p-1"><strong>Quantity:</strong><br>{{ object.qty_released }}</div>
+			</div>
+			<div class="row m-1">
+				<div class="col-12 border rounded p-1"><strong>Note:</strong><br>{{ object.release_note|safe }}</div>
+			</div>	
+        </div>
+
+{% endblock content %}

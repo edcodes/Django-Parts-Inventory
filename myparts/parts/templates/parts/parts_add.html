@@ -1,0 +1,40 @@
+{% extends "design/base.html" %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+	<h1>Parts</h1>
+	
+<div class="container-fluid listview">
+	<div class="row m-1 ">
+			<div class="col-6 p-1">				
+				<a  href="/" title="Back" alt="Back">
+				<img class="float-left p-1" src="{% static 'icons/back.png' %}" width="32" title="Back" alt="Back">
+				</a>
+			</div>
+	</div>
+	
+	<div class="m-2 p-1 border rounded border-info" id="mysearch" >
+		<div class="row p-1 m-1 ">
+		<div class="col-10">
+		<h3>Add New Part</h3>
+		</div>		
+		</div>		
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-4 p-1 border rounded border-info text-left">	
+						<h5>Serial Number:</h5>
+					</div>					
+					<div class="col-8 p-1 border rounded border-info text-center">
+						<input type="text" class="form-control" id="mypart" placeholder="Search Part name or Code">
+					</div>						
+				</div>
+			</div>
+	</div>	
+	
+<div id="myresult"></div>	
+</div>
+	
+<script type="text/javascript" src="{% static 'js/partsearch.js' %}" ></script>
+
+	
+{% endblock content %}

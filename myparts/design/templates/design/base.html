@@ -1,0 +1,93 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="icon" type="image/png" href="{% static 'favicon.ico' %}">
+	<script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+	<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
+	
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+{% load django_bootstrap5 %}	
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+	{{ form.media }}
+
+	
+    {% if title %}
+        <title>Parts - {{ title }}</title>
+    {% else %}
+        <title>Parts</title>
+    {% endif %}
+</head>
+<body>
+
+	<main role="main" class="container ">
+		<div class="row noprint navbar navbar-expand-md navbar-dark bg-steel ">
+			<div class="col-md-3 ">
+				  <a class="navbar-brand mr-4" href="/">Parts</a>
+			</div>	 
+			<div class="col-md-3 ">				  
+					            
+			</div>
+					{% if user.is_authenticated %}
+					<div class="col-md-4 text-right">
+					<strong class="text-white ">Welcome {{ user.get_full_name }} </strong>
+					
+					</div>
+					<div class="col-md-2 text-right">
+						<a class="btn btn-warning" href="{% url 'logout-page' %}">Logout</a>
+					</div>
+					{% else %}
+					<div class="col-md-6 text-right">
+						<a class="btn btn-primary" href="{% url 'login-page' %}">Login</a>
+						
+					{% comment %}	<a class="btn btn-info" href="{% url 'register-page' %}">Register</a> {% endcomment %}
+					
+					</div>
+				    {% endif %} 
+		</div>
+		<div class="row noprint">
+			<div class="col-12 m-0 p-2 noprint">
+{% if perms.stones.view_phonebook  %}				
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    Parts
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" href="{% url 'parts-list-page' %}">View</a></li>
+    
+  
+  </ul>
+</div>
+{% endif %}
+			</div>
+		</div>
+		
+		{% bootstrap_messages %}
+		<div class="row">
+        <div class="col-12">
+		  
+          {% block content %}{% endblock %}
+			<div class="modal fade" id="modal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                </div>
+              </div>
+            </div>
+			
+        </div>
+      </div>
+    </main>
+
+    
+</body>
+</html>

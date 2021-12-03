@@ -1,0 +1,34 @@
+{% extends "design/base.html" %}
+{% block content %}
+    
+        
+
+		<div class="row m-1 ">
+		<div class="col-12 p-4 text-center">
+			{% if user.is_authenticated %}
+			
+			{% else %}
+				<a class="btn btn-primary  m-2" href="{% url 'login-page' %}">Login</a>
+			{% endif %} 
+		</div>
+		</div>
+		
+		
+		<div class="row m-1 ">
+		<div class="col-12 p-4 text-center">
+		
+		</div>
+		</div>
+		
+		
+		<div class="row m-1 yesprint">
+		<div class="col-12 p-4 text-center">
+
+		
+		
+		</div>
+		</div>
+		
+		
+		
+{% endblock content %}
